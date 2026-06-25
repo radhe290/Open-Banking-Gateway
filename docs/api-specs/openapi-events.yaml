@@ -2,13 +2,22 @@ openapi: 3.0.3
 info:
   title: Meridian Bank Open Banking - Events API
   version: 3.1.0
+  description: Event subscription and polling API for simulated open banking notifications.
+  contact:
+    name: Meridian API Platform Team
+    email: api-support@meridianbank.example
 servers:
   - url: https://sandbox.api.meridianbank.example/v3.1
+tags:
+  - name: Events
+    description: Event subscription and polling operations.
 paths:
   /event-subscriptions:
     post:
       operationId: createEventSubscription
       summary: Create event subscription
+      description: Creates a subscription for consent, payment, and account-access events.
+      tags: [Events]
       requestBody:
         required: true
         content:
@@ -24,6 +33,8 @@ paths:
     get:
       operationId: getEventSubscription
       summary: Get event subscription
+      description: Returns the configuration and status of an event subscription.
+      tags: [Events]
       parameters:
         - $ref: '#/components/parameters/SubId'
       responses:
@@ -35,6 +46,8 @@ paths:
     delete:
       operationId: deleteEventSubscription
       summary: Delete event subscription
+      description: Deletes an event subscription and stops future notifications.
+      tags: [Events]
       parameters:
         - $ref: '#/components/parameters/SubId'
       responses:
@@ -44,6 +57,8 @@ paths:
     post:
       operationId: pollEvents
       summary: Poll pending events
+      description: Returns pending events for TPPs that use polling rather than webhooks.
+      tags: [Events]
       responses:
         '200':
           description: Events

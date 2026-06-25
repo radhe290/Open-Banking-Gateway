@@ -3,13 +3,21 @@ info:
   title: Meridian Bank Open Banking - Consents API
   version: 3.1.0
   description: Consent management API for simulated open banking access.
+  contact:
+    name: Meridian API Platform Team
+    email: api-support@meridianbank.example
 servers:
   - url: https://sandbox.api.meridianbank.example/v3.1
+tags:
+  - name: Consents
+    description: Consent lifecycle operations.
 paths:
   /consents:
     post:
       operationId: createConsent
       summary: Create an account access consent
+      description: Creates a consent resource that defines the permissions a customer may authorize for a TPP.
+      tags: [Consents]
       parameters:
         - $ref: '#/components/parameters/FapiInteractionId'
         - $ref: '#/components/parameters/FapiFinancialId'
@@ -43,6 +51,8 @@ paths:
     get:
       operationId: getConsent
       summary: Retrieve consent status
+      description: Returns the current state, permissions, and expiry metadata for a consent.
+      tags: [Consents]
       parameters:
         - $ref: '#/components/parameters/ConsentId'
         - $ref: '#/components/parameters/FapiInteractionId'
@@ -63,6 +73,8 @@ paths:
     delete:
       operationId: deleteConsent
       summary: Revoke a consent
+      description: Revokes a consent and prevents future API access using tokens bound to it.
+      tags: [Consents]
       parameters:
         - $ref: '#/components/parameters/ConsentId'
         - $ref: '#/components/parameters/FapiInteractionId'

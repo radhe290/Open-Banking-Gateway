@@ -2,13 +2,22 @@ openapi: 3.0.3
 info:
   title: Meridian Bank Open Banking - Accounts API
   version: 3.1.0
+  description: Account information API for simulated open banking access.
+  contact:
+    name: Meridian API Platform Team
+    email: api-support@meridianbank.example
 servers:
   - url: https://sandbox.api.meridianbank.example/v3.1
+tags:
+  - name: Accounts
+    description: Account information operations.
 paths:
   /accounts:
     get:
       operationId: listAccounts
       summary: List accounts accessible under consent
+      description: Returns accounts that the customer has authorized the TPP to access.
+      tags: [Accounts]
       parameters:
         - $ref: '#/components/parameters/FapiInteractionId'
         - $ref: '#/components/parameters/FapiFinancialId'
@@ -42,6 +51,8 @@ paths:
     get:
       operationId: getAccount
       summary: Get account details
+      description: Returns basic and detailed metadata for a single account when permitted by consent.
+      tags: [Accounts]
       parameters:
         - $ref: '#/components/parameters/AccountId'
         - $ref: '#/components/parameters/FapiInteractionId'
@@ -61,6 +72,8 @@ paths:
     get:
       operationId: getAccountBalances
       summary: Get balances for an account
+      description: Returns one or more balances for the selected account.
+      tags: [Accounts]
       parameters:
         - $ref: '#/components/parameters/AccountId'
         - $ref: '#/components/parameters/FapiInteractionId'
@@ -80,6 +93,8 @@ paths:
     get:
       operationId: listTransactions
       summary: List account transactions
+      description: Returns account transactions, optionally filtered by date range.
+      tags: [Accounts]
       parameters:
         - $ref: '#/components/parameters/AccountId'
         - $ref: '#/components/parameters/FapiInteractionId'
@@ -109,6 +124,8 @@ paths:
     get:
       operationId: listBeneficiaries
       summary: List beneficiaries
+      description: Returns beneficiaries associated with the selected account.
+      tags: [Accounts]
       parameters:
         - $ref: '#/components/parameters/AccountId'
       responses:
@@ -124,6 +141,8 @@ paths:
     get:
       operationId: listStandingOrders
       summary: List standing orders
+      description: Returns standing orders associated with the selected account.
+      tags: [Accounts]
       parameters:
         - $ref: '#/components/parameters/AccountId'
       responses:
@@ -139,6 +158,8 @@ paths:
     get:
       operationId: listDirectDebits
       summary: List direct debits
+      description: Returns direct debit mandates associated with the selected account.
+      tags: [Accounts]
       parameters:
         - $ref: '#/components/parameters/AccountId'
       responses:
