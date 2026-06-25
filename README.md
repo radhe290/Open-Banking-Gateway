@@ -65,6 +65,4 @@ tests/
 | Payments | `docs/api-specs/openapi-payments.yaml` | `POST /domestic-payment-consents`, `POST /domestic-payments` |
 | Events | `docs/api-specs/openapi-events.yaml` | `POST /event-subscriptions`, `POST /events` |
 
-## Submission Readiness Checklist
 
-The technical artefacts in this repository are organised to match the Zetheta P01D brief: split OpenAPI specifications, gateway and security architecture, consent modelling, developer portal documentation, sandbox design, governance policies, mock configuration, CI linting, Postman requests, diagrams, and exported wireframes.
