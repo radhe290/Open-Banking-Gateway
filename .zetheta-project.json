@@ -1,7 +1,6 @@
 {
-  "intern_id": "PENDING_USER_INPUT",
-  "intern_name": "PENDING_USER_INPUT",
-  "intern_email": "PENDING_USER_INPUT",
+  "intern_name": "Radhika_Dwivedi",
+  "intern_email": "dwivediradhika29@gmail.com",
   "project_code": "P01D",
   "project_title": "Open Banking API Gateway & Developer Portal Design",
   "submission_type": "github",
@@ -15,7 +14,7 @@
     "GitHub Actions"
   ],
   "duration_weeks": 1,
-  "github_repo_url": "PENDING_USER_INPUT",
+  "github_repo_url": "https://github.com/radhe290/Open-Banking-Gateway.git",
   "assessment_criteria": {
     "api_platform_engineering": true,
     "open_banking_standards": true,

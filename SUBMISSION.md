@@ -2,11 +2,10 @@
 
 ## Candidate Details
 
-- Name: PENDING_USER_INPUT
-- Intern ID: PENDING_USER_INPUT
-- Email: PENDING_USER_INPUT
+- Name: Radhika Dwivedi
+- Email: dwivediradhika29@gmail.com
 - Project Code: P01D
-- Repository URL: PENDING_USER_INPUT
+- Repository URL: https://github.com/radhe290/Open-Banking-Gateway.git
 
 ## Project Approach
 
@@ -51,13 +50,3 @@ AI assistance was used for project planning, documentation drafting, consistency
 | Feasibility & Practicality | 8/10 | Mock server, governance, monitoring |
 | CV Alignment | 8/10 | API platform engineering artefacts |
 
-## Final Checks
-
-- [x] Template markers removed or converted to pending user input fields.
-- [x] OpenAPI specs linted locally.
-- [x] Wireframes exported to PNG.
-- [x] Postman collection committed.
-- [x] No secrets or personal credentials committed.
-- [ ] Replace `PENDING_USER_INPUT` metadata with candidate details.
-- [ ] Push repository to GitHub and confirm CI green check.
-- [ ] Create final git tag `v1.0`.

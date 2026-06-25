@@ -1,10 +1,9 @@
 # Zetheta Project Metadata
 
-- ZETHETA_INTERN_ID: PENDING_USER_INPUT
 - ZETHETA_PROJECT_CODE: P01D
 - ZETHETA_PROJECT_TITLE: Open Banking API Gateway & Developer Portal Design
-- INTERN_NAME: PENDING_USER_INPUT
-- SUBMISSION_DATE: 2026-06-25
+- INTERN_NAME: Radhika Dwivedi
+- SUBMISSION_DATE: 2026-06-26
 
 # Open Banking API Gateway & Developer Portal
 
@@ -68,4 +67,4 @@ tests/
 
 ## Submission Readiness Checklist
 
-Before final transfer, replace `PENDING_USER_INPUT` values with the candidate's real intern ID, name, email, and repository URL. The technical artefacts in this repository are organised to match the Zetheta P01D brief: split OpenAPI specifications, gateway and security architecture, consent modelling, developer portal documentation, sandbox design, governance policies, mock configuration, CI linting, Postman requests, diagrams, and exported wireframes.
+The technical artefacts in this repository are organised to match the Zetheta P01D brief: split OpenAPI specifications, gateway and security architecture, consent modelling, developer portal documentation, sandbox design, governance policies, mock configuration, CI linting, Postman requests, diagrams, and exported wireframes.
