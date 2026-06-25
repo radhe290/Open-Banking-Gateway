@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: Meridian Bank Open Banking - Events API
+  version: 3.1.0
+servers:
+  - url: https://sandbox.api.meridianbank.example/v3.1
+paths:
+  /event-subscriptions:
+    post:
+      operationId: createEventSubscription
+      summary: Create event subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EventSubscriptionRequest' }
+      responses:
+        '201':
+          description: Subscription created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EventSubscription' }
+  /event-subscriptions/{subId}:
+    get:
+      operationId: getEventSubscription
+      summary: Get event subscription
+      parameters:
+        - $ref: '#/components/parameters/SubId'
+      responses:
+        '200':
+          description: Subscription
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EventSubscription' }
+    delete:
+      operationId: deleteEventSubscription
+      summary: Delete event subscription
+      parameters:
+        - $ref: '#/components/parameters/SubId'
+      responses:
+        '204':
+          description: Deleted
+  /events:
+    post:
+      operationId: pollEvents
+      summary: Poll pending events
+      responses:
+        '200':
+          description: Events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+components:
+  parameters:
+    SubId:
+      name: subId
+      in: path
+      required: true
+      schema: { type: string }
+  schemas:
+    EventSubscriptionRequest:
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: uri
+        eventTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventType'
+    EventSubscription:
+      type: object
+      properties:
+        subId: { type: string, example: sub_001 }
+        callbackUrl: { type: string, format: uri }
+        status: { type: string, enum: [Active, Suspended, Deleted] }
+    EventType:
+      type: string
+      enum:
+        - urn:bank:events:consent-revoked
+        - urn:bank:events:payment-status-changed
+        - urn:bank:events:account-access-consent-linked
+    Event:
+      type: object
+      properties:
+        eventId: { type: string }
+        eventType: { $ref: '#/components/schemas/EventType' }
+        resourceId: { type: string }
+        eventDateTime: { type: string, format: date-time }

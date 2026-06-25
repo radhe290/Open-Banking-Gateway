@@ -1,0 +1,16 @@
+_format_version: "3.0"
+services:
+  - name: accounts-api
+    url: http://accounts-service.internal
+    routes:
+      - name: accounts-route
+        paths:
+          - /v3.1/accounts
+plugins:
+  - name: rate-limiting
+    config:
+      minute: 300
+      policy: local
+  - name: correlation-id
+    config:
+      header_name: x-fapi-interaction-id

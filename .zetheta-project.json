@@ -1,0 +1,27 @@
+{
+  "intern_id": "TODO",
+  "intern_name": "TODO",
+  "intern_email": "TODO",
+  "project_code": "P01D",
+  "project_title": "Open Banking API Gateway & Developer Portal Design",
+  "submission_type": "github",
+  "submission_date": "TODO",
+  "tech_stack": [
+    "OpenAPI 3.0.3",
+    "Spectral",
+    "Postman",
+    "Prism",
+    "Mermaid",
+    "GitHub Actions"
+  ],
+  "duration_weeks": 1,
+  "github_repo_url": "TODO",
+  "assessment_criteria": {
+    "api_platform_engineering": true,
+    "open_banking_standards": true,
+    "oauth_fapi_security": true,
+    "developer_experience": true,
+    "api_governance": true,
+    "documentation_quality": true
+  }
+}

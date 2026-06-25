@@ -1,0 +1,201 @@
+openapi: 3.0.3
+info:
+  title: Meridian Bank Open Banking - Consents API
+  version: 3.1.0
+  description: Consent management API for simulated open banking access.
+servers:
+  - url: https://sandbox.api.meridianbank.example/v3.1
+paths:
+  /consents:
+    post:
+      operationId: createConsent
+      summary: Create an account access consent
+      parameters:
+        - $ref: '#/components/parameters/FapiInteractionId'
+        - $ref: '#/components/parameters/FapiFinancialId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      security:
+        - OAuth2: [consents]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConsentRequest'
+      responses:
+        '201':
+          description: Consent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /consents/{consentId}:
+    get:
+      operationId: getConsent
+      summary: Retrieve consent status
+      parameters:
+        - $ref: '#/components/parameters/ConsentId'
+        - $ref: '#/components/parameters/FapiInteractionId'
+        - $ref: '#/components/parameters/FapiFinancialId'
+      security:
+        - OAuth2: [consents]
+      responses:
+        '200':
+          description: Consent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteConsent
+      summary: Revoke a consent
+      parameters:
+        - $ref: '#/components/parameters/ConsentId'
+        - $ref: '#/components/parameters/FapiInteractionId'
+        - $ref: '#/components/parameters/FapiFinancialId'
+      security:
+        - OAuth2: [consents]
+      responses:
+        '204':
+          description: Consent revoked
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.meridianbank.example/oauth2/authorize
+          tokenUrl: https://auth.meridianbank.example/oauth2/token
+          scopes:
+            consents: Manage open banking consents
+  parameters:
+    FapiInteractionId:
+      name: x-fapi-interaction-id
+      in: header
+      required: true
+      schema:
+        type: string
+        format: uuid
+    FapiFinancialId:
+      name: x-fapi-financial-id
+      in: header
+      required: true
+      schema:
+        type: string
+        example: meridian-bank
+    IdempotencyKey:
+      name: x-idempotency-key
+      in: header
+      required: true
+      schema:
+        type: string
+    ConsentId:
+      name: consentId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    CreateConsentRequest:
+      type: object
+      required: [permissions, expirationDateTime]
+      properties:
+        permissions:
+          type: array
+          items:
+            type: string
+            enum: [ReadAccountsBasic, ReadAccountsDetail, ReadBalances, ReadTransactionsBasic, ReadTransactionsDetail, ReadBeneficiaries, ReadStandingOrders, ReadDirectDebits, ReadProducts]
+        expirationDateTime:
+          type: string
+          format: date-time
+    Consent:
+      type: object
+      required: [consentId, status, permissions]
+      properties:
+        consentId:
+          type: string
+          example: cns_123456789
+        status:
+          type: string
+          enum: [AwaitingAuthorisation, Authorised, Rejected, Revoked, Expired]
+        permissions:
+          type: array
+          items:
+            type: string
+        expirationDateTime:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            interactionId:
+              type: string
+              format: uuid
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    TooManyRequests:
+      description: Too many requests
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

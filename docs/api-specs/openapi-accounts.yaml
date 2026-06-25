@@ -1,0 +1,261 @@
+openapi: 3.0.3
+info:
+  title: Meridian Bank Open Banking - Accounts API
+  version: 3.1.0
+servers:
+  - url: https://sandbox.api.meridianbank.example/v3.1
+paths:
+  /accounts:
+    get:
+      operationId: listAccounts
+      summary: List accounts accessible under consent
+      parameters:
+        - $ref: '#/components/parameters/FapiInteractionId'
+        - $ref: '#/components/parameters/FapiFinancialId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+      security:
+        - OAuth2: [accounts]
+      responses:
+        '200':
+          description: Account list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Account'
+                  links:
+                    $ref: '#/components/schemas/Links'
+                  meta:
+                    $ref: '#/components/schemas/Meta'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /accounts/{accountId}:
+    get:
+      operationId: getAccount
+      summary: Get account details
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/FapiInteractionId'
+        - $ref: '#/components/parameters/FapiFinancialId'
+      security:
+        - OAuth2: [accounts]
+      responses:
+        '200':
+          description: Account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /accounts/{accountId}/balances:
+    get:
+      operationId: getAccountBalances
+      summary: Get balances for an account
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/FapiInteractionId'
+        - $ref: '#/components/parameters/FapiFinancialId'
+      security:
+        - OAuth2: [balances]
+      responses:
+        '200':
+          description: Balance list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Balance'
+  /accounts/{accountId}/transactions:
+    get:
+      operationId: listTransactions
+      summary: List account transactions
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/FapiInteractionId'
+        - $ref: '#/components/parameters/FapiFinancialId'
+        - name: fromDateTime
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: toDateTime
+          in: query
+          schema:
+            type: string
+            format: date-time
+      security:
+        - OAuth2: [transactions]
+      responses:
+        '200':
+          description: Transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+  /accounts/{accountId}/beneficiaries:
+    get:
+      operationId: listBeneficiaries
+      summary: List beneficiaries
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Beneficiaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Beneficiary'
+  /accounts/{accountId}/standing-orders:
+    get:
+      operationId: listStandingOrders
+      summary: List standing orders
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Standing orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StandingOrder'
+  /accounts/{accountId}/direct-debits:
+    get:
+      operationId: listDirectDebits
+      summary: List direct debits
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Direct debits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectDebit'
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.meridianbank.example/oauth2/authorize
+          tokenUrl: https://auth.meridianbank.example/oauth2/token
+          scopes:
+            accounts: Read account data
+            balances: Read balances
+            transactions: Read transactions
+  parameters:
+    FapiInteractionId:
+      name: x-fapi-interaction-id
+      in: header
+      required: true
+      schema: { type: string, format: uuid }
+    FapiFinancialId:
+      name: x-fapi-financial-id
+      in: header
+      required: true
+      schema: { type: string }
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    PerPage:
+      name: per_page
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      schema: { type: string }
+  schemas:
+    Account:
+      type: object
+      properties:
+        accountId: { type: string, example: acc_001 }
+        currency: { type: string, example: GBP }
+        accountType: { type: string, example: CurrentAccount }
+        nickname: { type: string, example: Everyday Account }
+    Balance:
+      type: object
+      properties:
+        type: { type: string, example: InterimAvailable }
+        amount: { type: string, example: '1250.50' }
+        currency: { type: string, example: GBP }
+    Transaction:
+      type: object
+      properties:
+        transactionId: { type: string }
+        bookingDateTime: { type: string, format: date-time }
+        amount: { type: string }
+        creditDebitIndicator: { type: string, enum: [Credit, Debit] }
+        description: { type: string }
+    Beneficiary:
+      type: object
+      properties:
+        beneficiaryId: { type: string }
+        name: { type: string }
+    StandingOrder:
+      type: object
+      properties:
+        standingOrderId: { type: string }
+        frequency: { type: string }
+    DirectDebit:
+      type: object
+      properties:
+        directDebitId: { type: string }
+        merchantName: { type: string }
+    Links:
+      type: object
+      properties:
+        self: { type: string, format: uri }
+        next: { type: string, format: uri }
+    Meta:
+      type: object
+      properties:
+        total: { type: integer }
+        requestDateTime: { type: string, format: date-time }
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    TooManyRequests:
+      description: Too many requests

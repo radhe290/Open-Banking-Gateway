@@ -1,0 +1,31 @@
+{
+  "info": {
+    "name": "Open Banking API Gateway",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Consent",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+          { "key": "x-fapi-financial-id", "value": "meridian-bank" },
+          { "key": "x-idempotency-key", "value": "{{$guid}}" }
+        ],
+        "url": "{{baseUrl}}/consents"
+      }
+    },
+    {
+      "name": "List Accounts",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+          { "key": "x-fapi-financial-id", "value": "meridian-bank" }
+        ],
+        "url": "{{baseUrl}}/accounts"
+      }
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+openapi: 3.0.3
+info:
+  title: Meridian Bank Open Banking - Payments API
+  version: 3.1.0
+servers:
+  - url: https://sandbox.api.meridianbank.example/v3.1
+paths:
+  /domestic-payment-consents:
+    post:
+      operationId: createDomesticPaymentConsent
+      summary: Create domestic payment consent
+      security:
+        - OAuth2: [payments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentConsentRequest' }
+      responses:
+        '201':
+          description: Domestic payment consent created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaymentConsent' }
+  /domestic-payment-consents/{consentId}:
+    get:
+      operationId: getDomesticPaymentConsent
+      summary: Get domestic payment consent
+      parameters:
+        - $ref: '#/components/parameters/ConsentId'
+      responses:
+        '200':
+          description: Payment consent
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaymentConsent' }
+  /domestic-payments:
+    post:
+      operationId: submitDomesticPayment
+      summary: Submit domestic payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentSubmission' }
+      responses:
+        '201':
+          description: Payment submitted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+  /domestic-payments/{paymentId}:
+    get:
+      operationId: getDomesticPayment
+      summary: Get domestic payment status
+      parameters:
+        - $ref: '#/components/parameters/PaymentId'
+      responses:
+        '200':
+          description: Payment status
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+  /international-payment-consents:
+    post:
+      operationId: createInternationalPaymentConsent
+      summary: Create international payment consent
+      responses:
+        '201':
+          description: International payment consent created
+  /international-payment-consents/{consentId}:
+    get:
+      operationId: getInternationalPaymentConsent
+      summary: Get international payment consent
+      parameters:
+        - $ref: '#/components/parameters/ConsentId'
+      responses:
+        '200':
+          description: International payment consent
+  /international-payments:
+    post:
+      operationId: submitInternationalPayment
+      summary: Submit international payment
+      responses:
+        '201':
+          description: International payment submitted
+  /international-payments/{paymentId}:
+    get:
+      operationId: getInternationalPayment
+      summary: Get international payment status
+      parameters:
+        - $ref: '#/components/parameters/PaymentId'
+      responses:
+        '200':
+          description: International payment status
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.meridianbank.example/oauth2/authorize
+          tokenUrl: https://auth.meridianbank.example/oauth2/token
+          scopes:
+            payments: Initiate payments
+  parameters:
+    ConsentId:
+      name: consentId
+      in: path
+      required: true
+      schema: { type: string }
+    PaymentId:
+      name: paymentId
+      in: path
+      required: true
+      schema: { type: string }
+  schemas:
+    AccountReference:
+      type: object
+      properties:
+        schemeName: { type: string, example: SortCodeAccountNumber }
+        identification: { type: string, example: '12345612345678' }
+        name: { type: string, example: Alex Customer }
+    Amount:
+      type: object
+      properties:
+        amount: { type: string, example: '50.00' }
+        currency: { type: string, example: GBP }
+    Risk:
+      type: object
+      properties:
+        paymentContextCode: { type: string, example: BillPayment }
+        merchantCategoryCode: { type: string, example: '5967' }
+    PaymentConsentRequest:
+      type: object
+      properties:
+        debtorAccount: { $ref: '#/components/schemas/AccountReference' }
+        creditorAccount: { $ref: '#/components/schemas/AccountReference' }
+        instructedAmount: { $ref: '#/components/schemas/Amount' }
+        remittanceInformation: { type: string, example: Invoice 1001 }
+        risk: { $ref: '#/components/schemas/Risk' }
+    PaymentConsent:
+      type: object
+      properties:
+        consentId: { type: string, example: payc_001 }
+        status: { type: string, enum: [AwaitingAuthorisation, Authorised, Rejected, Revoked] }
+    PaymentSubmission:
+      type: object
+      properties:
+        consentId: { type: string }
+    Payment:
+      type: object
+      properties:
+        paymentId: { type: string, example: pay_001 }
+        status: { type: string, enum: [Pending, AcceptedSettlementInProcess, AcceptedSettlementCompleted, Rejected] }
