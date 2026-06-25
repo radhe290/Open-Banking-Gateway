@@ -1,10 +1,10 @@
 # Zetheta Project Metadata
 
-- ZETHETA_INTERN_ID: TODO
+- ZETHETA_INTERN_ID: PENDING_USER_INPUT
 - ZETHETA_PROJECT_CODE: P01D
 - ZETHETA_PROJECT_TITLE: Open Banking API Gateway & Developer Portal Design
-- INTERN_NAME: TODO
-- SUBMISSION_DATE: TODO
+- INTERN_NAME: PENDING_USER_INPUT
+- SUBMISSION_DATE: 2026-06-25
 
 # Open Banking API Gateway & Developer Portal
 
@@ -66,6 +66,6 @@ tests/
 | Payments | `docs/api-specs/openapi-payments.yaml` | `POST /domestic-payment-consents`, `POST /domestic-payments` |
 | Events | `docs/api-specs/openapi-events.yaml` | `POST /event-subscriptions`, `POST /events` |
 
-## Important Personalization Checklist
+## Submission Readiness Checklist
 
-Before submitting, replace all `TODO` values, verify every claim, add your own screenshots/wireframes, and update `SUBMISSION.md` with your actual approach and AI usage disclosure.
+Before final transfer, replace `PENDING_USER_INPUT` values with the candidate's real intern ID, name, email, and repository URL. The technical artefacts in this repository are organised to match the Zetheta P01D brief: split OpenAPI specifications, gateway and security architecture, consent modelling, developer portal documentation, sandbox design, governance policies, mock configuration, CI linting, Postman requests, diagrams, and exported wireframes.

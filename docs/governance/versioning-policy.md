@@ -25,3 +25,9 @@ stateDiagram-v2
   Deprecated --> Sunset
   Sunset --> Retired
 ```
+
+## Lifecycle Rules
+
+Preview APIs may change with limited notice and are used only for sandbox feedback. Active APIs are production-supported and covered by monitoring, incident communication, and compatibility rules. Deprecated APIs remain available during the notice period but include deprecation headers and migration documentation. Sunset APIs are blocked for new onboarding. Retired APIs return `410 Gone`.
+
+The default production support window is one active major version plus the previous deprecated major version. Non-breaking changes are documented in the changelog and OpenAPI descriptions without changing the URI major version.

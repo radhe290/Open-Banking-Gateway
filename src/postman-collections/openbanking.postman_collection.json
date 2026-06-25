@@ -1,31 +1,330 @@
 {
   "info": {
     "name": "Open Banking API Gateway",
+    "description": "Sandbox requests for the P01D Open Banking API Gateway submission.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    { "key": "baseUrl", "value": "https://sandbox.meridian.example/v3.1" },
+    { "key": "accessToken", "value": "replace-with-sandbox-token" },
+    { "key": "financialId", "value": "meridian-bank" },
+    { "key": "consentId", "value": "con-1001" },
+    { "key": "accountId", "value": "acc-1001" },
+    { "key": "paymentId", "value": "pay-1001" },
+    { "key": "subscriptionId", "value": "sub-1001" }
+  ],
   "item": [
     {
-      "name": "Create Consent",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
-          { "key": "x-fapi-financial-id", "value": "meridian-bank" },
-          { "key": "x-idempotency-key", "value": "{{$guid}}" }
-        ],
-        "url": "{{baseUrl}}/consents"
-      }
+      "name": "Consent",
+      "item": [
+        {
+          "name": "Create Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" },
+              { "key": "x-idempotency-key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"permissions\":[\"ReadAccountsBasic\",\"ReadBalances\",\"ReadTransactionsBasic\"],\"expirationDateTime\":\"2026-09-25T00:00:00Z\"}"
+            },
+            "url": "{{baseUrl}}/consents"
+          }
+        },
+        {
+          "name": "Get Consent",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/consents/{{consentId}}"
+          }
+        },
+        {
+          "name": "Revoke Consent",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/consents/{{consentId}}"
+          }
+        }
+      ]
     },
     {
-      "name": "List Accounts",
-      "request": {
-        "method": "GET",
-        "header": [
-          { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
-          { "key": "x-fapi-financial-id", "value": "meridian-bank" }
-        ],
-        "url": "{{baseUrl}}/accounts"
-      }
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "List Accounts",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/accounts"
+          }
+        },
+        {
+          "name": "Get Account",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/accounts/{{accountId}}"
+          }
+        },
+        {
+          "name": "Get Balances",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/accounts/{{accountId}}/balances"
+          }
+        },
+        {
+          "name": "Get Transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/accounts/{{accountId}}/transactions?fromBookingDateTime=2026-01-01T00:00:00Z&toBookingDateTime=2026-06-25T00:00:00Z&page=1&per_page=25"
+          }
+        },
+        {
+          "name": "Get Beneficiaries",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/accounts/{{accountId}}/beneficiaries"
+          }
+        },
+        {
+          "name": "Get Standing Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/accounts/{{accountId}}/standing-orders"
+          }
+        },
+        {
+          "name": "Get Direct Debits",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/accounts/{{accountId}}/direct-debits"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Domestic Payment Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" },
+              { "key": "x-idempotency-key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"instructedAmount\":{\"amount\":\"25.00\",\"currency\":\"GBP\"},\"creditorAccount\":{\"schemeName\":\"SortCodeAccountNumber\",\"identification\":\"12345612345678\",\"name\":\"Example Merchant\"}}"
+            },
+            "url": "{{baseUrl}}/domestic-payment-consents"
+          }
+        },
+        {
+          "name": "Get Domestic Payment Consent",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/domestic-payment-consents/{{consentId}}"
+          }
+        },
+        {
+          "name": "Submit Domestic Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" },
+              { "key": "x-idempotency-key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"consentId\":\"{{consentId}}\"}"
+            },
+            "url": "{{baseUrl}}/domestic-payments"
+          }
+        },
+        {
+          "name": "Get Domestic Payment",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/domestic-payments/{{paymentId}}"
+          }
+        },
+        {
+          "name": "Create International Payment Consent",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" },
+              { "key": "x-idempotency-key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"instructedAmount\":{\"amount\":\"100.00\",\"currency\":\"EUR\"},\"creditorAccount\":{\"schemeName\":\"IBAN\",\"identification\":\"DE89370400440532013000\",\"name\":\"Example Supplier\"}}"
+            },
+            "url": "{{baseUrl}}/international-payment-consents"
+          }
+        },
+        {
+          "name": "Get International Payment Consent",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/international-payment-consents/{{consentId}}"
+          }
+        },
+        {
+          "name": "Submit International Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" },
+              { "key": "x-idempotency-key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"consentId\":\"{{consentId}}\",\"exchangeRateInformation\":{\"unitCurrency\":\"GBP\",\"exchangeRate\":\"1.17\"}}"
+            },
+            "url": "{{baseUrl}}/international-payments"
+          }
+        },
+        {
+          "name": "Get International Payment",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/international-payments/{{paymentId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Create Event Subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"callbackUrl\":\"https://tpp.example/events\",\"eventTypes\":[\"consent.revoked\",\"payment.status.changed\"]}"
+            },
+            "url": "{{baseUrl}}/event-subscriptions"
+          }
+        },
+        {
+          "name": "Get Event Subscription",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/event-subscriptions/{{subscriptionId}}"
+          }
+        },
+        {
+          "name": "Poll Events",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"ack\":[\"evt-previous\"]}"
+            },
+            "url": "{{baseUrl}}/events"
+          }
+        }
+      ]
     }
   ]
 }

@@ -36,3 +36,16 @@ The sandbox lets third-party developers test account access, consent, payment in
 ## Data Reset
 
 Sandbox data should reset nightly and also support manual reset per developer application.
+
+## Sandbox Capabilities
+
+- Dynamic mocks generated from the OpenAPI specifications through Prism.
+- Synthetic customers and accounts with no production personal data.
+- Error injection using deterministic IDs and payment amounts.
+- Configurable latency profiles for normal, degraded, and timeout scenarios.
+- Manual reset option in the portal design for restoring seed data.
+- Separate base URLs per API domain so developers can test accounts, consents, payments, and events independently.
+
+## Acceptance Criteria
+
+A developer should be able to register a sandbox app, create consent, call account APIs, initiate a simulated payment, poll payment status, subscribe to event notifications, trigger common error cases, and reset data without administrator intervention.

@@ -66,7 +66,31 @@ Kong or Apigee are the strongest candidates. For this simulated bank, Kong is se
 - Data: consent database encrypted at rest.
 - Observability: centralized logs, metrics, traces, and audit stream.
 
-## TODO
+## Request Flow
 
-- Add a draw.io or exported PNG diagram in `docs/architecture/diagrams/`.
-- Expand this to 1,500-2,500 words with your rationale and citations.
+1. A regulated TPP sends traffic to the public API hostname through TLS.
+2. The load balancer applies WAF and DDoS controls before forwarding to the gateway cluster.
+3. The gateway validates the client certificate where mTLS is required.
+4. The OAuth/FAPI policy engine validates token signature, expiry, audience, issuer, scope, and certificate binding.
+5. The consent policy checks that the token is attached to an active consent and that the requested endpoint is allowed by the consent permissions.
+6. The OpenAPI validator rejects malformed paths, headers, query parameters, and request bodies before backend services are reached.
+7. The rate limiter applies per-TPP, per-endpoint, and platform-level limits.
+8. The router sends the request to the appropriate domain service.
+9. Responses are transformed into the common envelope and error taxonomy.
+10. Audit logs, metrics, and traces are emitted for regulatory evidence and operations.
+
+## Technology Rationale
+
+Kong is selected for the simulated implementation because the assessment needs a design that is practical to demonstrate without requiring a proprietary enterprise platform. Kong supports declarative configuration, plugins, rate limiting, request transformation, authentication integration, and horizontal scaling. Apigee would be a strong enterprise choice when commercial API monetisation and analytics are the primary driver, but its cost and managed-service assumptions are less suitable for a student submission. AWS API Gateway is operationally attractive for an AWS-only bank, but a regulated open banking platform benefits from cloud-neutral controls and portability. Tyk remains a viable alternative, especially for teams wanting an open-source gateway and portal bundle, but Kong has broader ecosystem examples for plugin-driven policy enforcement.
+
+## Control Boundaries
+
+The gateway is deliberately not responsible for core banking business rules. It enforces edge controls: authentication, authorization, schema validation, rate limiting, request routing, protocol consistency, and observability. Domain services remain responsible for account ownership rules, payment execution decisions, ledger integrity, customer records, and event generation. This split keeps gateway policy stable while allowing each banking domain to evolve independently.
+
+## Failure Handling
+
+The gateway should fail closed for identity, consent, certificate, and schema checks. If the consent store or authorization server is unavailable, regulated resource calls return a controlled `503` or `401/403` depending on the failure point rather than bypassing validation. Circuit breakers isolate unhealthy domain services, and retry behaviour is limited to idempotent requests. Payment initiation endpoints rely on `x-idempotency-key` and server-side deduplication to prevent duplicate payment execution during network retries.
+
+## Diagram Exports
+
+The canonical component diagram is embedded above in Mermaid and exported as `docs/architecture/diagrams/gateway-architecture.png` for submission review.

@@ -21,3 +21,11 @@ The platform uses token bucket rate limiting because it supports controlled burs
 ## Increase Requests
 
 TPPs may request higher limits after demonstrating production use, low error rates, and legitimate customer demand.
+
+## Regulatory Rationale
+
+Open banking APIs must be fair to all authorised TPPs and resilient under bursty traffic. The design avoids unlimited access for a single large participant and protects payment endpoints more tightly than read-only endpoints. Limits are evaluated by client ID, certificate thumbprint, endpoint category, and environment. Sandbox limits are lower so developers notice throttling behaviour early.
+
+## Response Behaviour
+
+When a client exceeds its quota, the gateway returns `429 Too Many Requests` with `Retry-After` and rate limit headers. The response body uses the shared error envelope so developers receive a stable machine-readable code. Repeated violations can trigger temporary suspension and a developer portal notification.

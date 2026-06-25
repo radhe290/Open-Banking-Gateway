@@ -2,22 +2,22 @@
 
 ## Goal
 
-Make a first sandbox `GET /accounts` call in under 30 minutes.
+Make a first sandbox `GET /accounts` call in under 30 minutes using the simulated Meridian Bank developer portal.
 
 ## Steps
 
-1. Create a developer account.
-2. Register an application.
+1. Create a developer account in the portal.
+2. Register an application and select the sandbox environment.
 3. Upload or generate sandbox certificates.
 4. Create an account access consent.
-5. Redirect the customer through authorization.
-6. Exchange authorization code for token.
-7. Call the accounts endpoint.
+5. Redirect the customer through the simulated authorization journey.
+6. Exchange the authorization code for a consent-bound access token.
+7. Call the accounts endpoint with FAPI headers.
 
 ## Create Consent
 
 ```bash
-curl -X POST https://sandbox.api.example.com/v3.1/consents \
+curl -X POST https://sandbox.meridian.example/v3.1/consents \
   -H "Authorization: Bearer $CLIENT_TOKEN" \
   -H "x-fapi-interaction-id: 7f6b4d34-0000-4000-9000-000000000001" \
   -H "x-fapi-financial-id: meridian-bank" \
@@ -37,14 +37,14 @@ headers = {
     "x-fapi-financial-id": "meridian-bank"
 }
 
-response = requests.get("https://sandbox.api.example.com/v3.1/accounts", headers=headers)
+response = requests.get("https://sandbox.meridian.example/v3.1/accounts", headers=headers)
 print(response.json())
 ```
 
 ## Node.js Example
 
 ```javascript
-const response = await fetch("https://sandbox.api.example.com/v3.1/accounts", {
+const response = await fetch("https://sandbox.meridian.example/v3.1/accounts", {
   headers: {
     Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     "x-fapi-interaction-id": "7f6b4d34-0000-4000-9000-000000000003",
@@ -59,7 +59,7 @@ console.log(await response.json());
 
 ```java
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://sandbox.api.example.com/v3.1/accounts"))
+    .uri(URI.create("https://sandbox.meridian.example/v3.1/accounts"))
     .header("Authorization", "Bearer " + accessToken)
     .header("x-fapi-interaction-id", "7f6b4d34-0000-4000-9000-000000000004")
     .header("x-fapi-financial-id", "meridian-bank")
@@ -67,6 +67,28 @@ HttpRequest request = HttpRequest.newBuilder()
     .build();
 ```
 
-## TODO
+## Expected Response
 
-Replace placeholder hosts and add screenshots from your portal wireframes.
+```json
+{
+  "data": [
+    {
+      "accountId": "acc-1001",
+      "currency": "GBP",
+      "accountType": "CurrentAccount",
+      "status": "Enabled",
+      "nickname": "Everyday Account"
+    }
+  ],
+  "links": {
+    "self": "/v3.1/accounts"
+  },
+  "meta": {
+    "total": 1
+  }
+}
+```
+
+## Portal Screens
+
+The exported wireframes in `docs/developer-portal/wireframes/` cover homepage, onboarding, dashboard, API reference, Getting Started, and API status pages.

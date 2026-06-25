@@ -10,6 +10,8 @@ The platform uses OAuth 2.0 Authorization Code Flow with PKCE and FAPI-aligned c
 openssl req -newkey rsa:2048 -nodes -keyout sandbox-client.key -x509 -days 365 -out sandbox-client.crt
 ```
 
+The sandbox certificate is self-signed for simulation only. In production, regulated TPPs would use certificates anchored in the relevant trust framework, such as eIDAS certificates for PSD2, OBWAC/OBSEAL-style certificates for UK Open Banking, or register-backed CDR certificates in Australia.
+
 ## Authorization Flow
 
 1. TPP creates consent.
@@ -19,6 +21,24 @@ openssl req -newkey rsa:2048 -nodes -keyout sandbox-client.key -x509 -days 365 -
 5. Authorization server returns signed response.
 6. TPP exchanges code for token over mTLS.
 7. TPP calls resource endpoint with access token.
+
+## Required API Headers
+
+| Header | Required For | Purpose |
+| --- | --- | --- |
+| `Authorization` | All protected APIs | Bearer access token |
+| `x-fapi-interaction-id` | All APIs | End-to-end correlation and audit |
+| `x-fapi-financial-id` | All APIs | Identifies the financial institution/API brand |
+| `x-idempotency-key` | POST consent/payment APIs | Prevents duplicate state-changing requests |
+
+## Security Checklist
+
+- Use Authorization Code with PKCE for customer authorization.
+- Use PAR to push sensitive authorization details through the back channel.
+- Use JARM to protect authorization responses.
+- Bind tokens to the client certificate where mTLS is required.
+- Validate token scope and consent permissions before every resource call.
+- Rotate refresh tokens and revoke them immediately when consent is revoked.
 
 ## Troubleshooting
 

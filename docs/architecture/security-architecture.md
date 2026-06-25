@@ -66,7 +66,61 @@ stateDiagram-v2
   Expired --> [*]
 ```
 
-## TODO
+## Payment Initiation Flow
 
-- Expand with payment initiation and revocation sequence diagrams.
-- Add threat model details from `threat-model.md`.
+```mermaid
+sequenceDiagram
+  participant TPP
+  participant Gateway
+  participant Consent as Payment Consent Service
+  participant AS as Authorization Server
+  participant User
+  participant Payments
+  TPP->>Gateway: POST /domestic-payment-consents
+  Gateway->>Consent: Validate and store payment instruction
+  Consent-->>Gateway: Payment consent AwaitingAuthorisation
+  Gateway-->>TPP: 201 Created
+  TPP->>AS: PAR + signed request object for payment consent
+  AS->>User: Strong customer authentication and payment approval
+  User-->>AS: Approval
+  AS-->>TPP: JARM authorization response
+  TPP->>AS: Token request over mTLS with PKCE verifier
+  AS-->>TPP: Consent-bound access token
+  TPP->>Gateway: POST /domestic-payments with x-idempotency-key
+  Gateway->>Payments: Submit authorized payment
+  Payments-->>Gateway: PaymentId and status
+  Gateway-->>TPP: 201 Created
+```
+
+## Consent Revocation Flow
+
+```mermaid
+sequenceDiagram
+  participant User
+  participant Portal as Bank Consent Dashboard
+  participant Consent
+  participant AS as Authorization Server
+  participant Events
+  participant TPP
+  User->>Portal: Revoke consent
+  Portal->>Consent: Mark consent Revoked
+  Consent->>AS: Revoke refresh and access tokens
+  Consent->>Events: Publish consent-revoked event
+  Events-->>TPP: Event notification / polling response
+  TPP->>Gateway: Later API call with old token
+  Gateway-->>TPP: 403 consent_revoked
+```
+
+## Threat Model Linkage
+
+The threat model focuses on ten risks called out in the brief: injection, broken authentication, excessive data exposure, rate limiting bypass, consent scope escalation, token theft, certificate spoofing, replay attacks, CSRF in the consent flow, and insider threat. The security architecture mitigates these through OpenAPI validation, PKCE, mTLS, PAR, JARM, signed request objects, certificate-bound access tokens, least-privilege scopes, consent-to-token binding, and immutable audit logs.
+
+## Operational Security Rules
+
+- Authorization codes are single-use and expire quickly.
+- Access tokens are short-lived and audience-restricted to the resource APIs.
+- Refresh tokens are rotated and revoked on consent revocation.
+- Payment submission requires an active payment consent and idempotency key.
+- Redirect URIs must exactly match registered application metadata.
+- All security decisions are logged with `x-fapi-interaction-id`.
+- Certificate revocation status is checked during client authentication.

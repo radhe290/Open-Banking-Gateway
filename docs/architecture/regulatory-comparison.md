@@ -23,7 +23,21 @@ This document compares four major open banking regimes and identifies design imp
 4. API documentation must be clear enough for regulated third-party providers.
 5. Monitoring must expose availability, latency, error rate, and consent conversion.
 
-## TODO
+## Design Judgement
 
-- Add 6-10 citations from official standards pages.
-- Add your own final judgement on which regime most influenced this design.
+The design uses FAPI-style controls as the strongest common denominator because Australia CDR and UK Open Banking both demonstrate the direction of travel for high-assurance financial APIs. PSD2 contributes the regulatory need for strong customer authentication, dedicated interfaces, and certificate-backed trust. India AA contributes the most useful consent lesson: consent should be a granular artefact with purpose, scope, duration, and revocation behaviour, not a simple yes/no flag.
+
+For this simulated bank, the UK Open Banking model most influenced the API surface because it gives the clearest reference for accounts, balances, transactions, payments, and event notifications. The India AA model most influenced the consent lifecycle, while Australia CDR influenced the decision to make FAPI Advanced controls the baseline rather than an optional enhancement.
+
+## References
+
+- European Commission, Revised Payment Services Directive (PSD2).
+- European Banking Authority, Regulatory Technical Standards on Strong Customer Authentication.
+- Open Banking UK, Read/Write API and Customer Experience Guidelines.
+- Open Banking UK, Directory and certificate trust framework guidance.
+- ReBIT and Sahamati, Account Aggregator ecosystem specifications and consent artefact model.
+- Reserve Bank of India, NBFC Account Aggregator directions.
+- Australian Data Standards Body, Consumer Data Standards.
+- Australian Competition and Consumer Commission, Consumer Data Right guidance.
+- OpenID Foundation, Financial-grade API security profiles.
+- OpenAPI Initiative, OpenAPI Specification 3.0.3.

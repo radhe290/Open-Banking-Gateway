@@ -1,12 +1,10 @@
 # Wireframes
 
-Export at least six PNG wireframes here:
+This folder contains six exported PNG wireframes for the developer portal:
 
-1. Homepage
-2. Registration and onboarding
-3. Developer dashboard
-4. API reference page
-5. Getting Started page
-6. API status page
-
-Use Figma, Miro, Draw.io, or another design tool. The final submission should contain actual PNG files, not only this README.
+1. `01-homepage.png`
+2. `02-onboarding.png`
+3. `03-dashboard.png`
+4. `04-api-reference.png`
+5. `05-getting-started.png`
+6. `06-status.png`

@@ -24,3 +24,7 @@ Grafana with Prometheus is selected for the simulated implementation because it 
 - Consent lifecycle funnel.
 - Payment status distribution.
 - Top TPPs by traffic.
+
+## Alert Routing
+
+Availability and payment failures page the API operations team immediately. Consent conversion drops notify product and security teams because the cause may be user experience friction, authorization server issues, or fraud controls. Repeated invalid certificate events notify security operations. Public incident updates are reflected on the developer portal status page.
