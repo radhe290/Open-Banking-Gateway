@@ -1,14 +1,18 @@
-name: Lint OpenAPI Specifications
+name: Validate Open Banking Artefacts
 
 on:
   push:
   pull_request:
 
 jobs:
-  spectral:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: stoplightio/spectral-action@latest
+      - uses: actions/setup-node@v4
         with:
-          file_glob: docs/api-specs/*.yaml
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npx spectral lint docs/api-specs/*.yaml --fail-severity warn

@@ -1,5 +1,6 @@
 # Zetheta Project Metadata
 
+- ZETHETA_INTERN_ID: PENDING_ZETHETA_ISSUED_ID
 - ZETHETA_PROJECT_CODE: P01D
 - ZETHETA_PROJECT_TITLE: Open Banking API Gateway & Developer Portal Design
 - INTERN_NAME: Radhika Dwivedi
@@ -8,6 +9,10 @@
 # Open Banking API Gateway & Developer Portal
 
 This repository contains the design artefacts for a simulated mid-size bank launching an Open Banking API platform. The project covers gateway architecture, OAuth 2.0/FAPI security, consent management, OpenAPI 3.0 specifications, developer portal design, sandbox design, monitoring, and API governance.
+
+## Architecture Diagram
+
+![Gateway architecture](docs/architecture/diagrams/gateway-architecture.png)
 
 ## Quick Start
 
@@ -21,7 +26,19 @@ npm install
 npm run lint:openapi
 ```
 
-5. Start the mock server after installing dependencies:
+5. Run all local validation checks:
+
+```bash
+npm test
+```
+
+6. Start the deterministic sandbox mock server after installing dependencies:
+
+```bash
+npm run mock:sandbox
+```
+
+7. Or start one OpenAPI-backed Prism mock by API domain:
 
 ```bash
 npm run mock:accounts
@@ -65,4 +82,12 @@ tests/
 | Payments | `docs/api-specs/openapi-payments.yaml` | `POST /domestic-payment-consents`, `POST /domestic-payments` |
 | Events | `docs/api-specs/openapi-events.yaml` | `POST /event-subscriptions`, `POST /events` |
 
+## Local Validation Evidence
 
+- `npm run lint:openapi`: Spectral validation for all OpenAPI files.
+- `npm run test:postman`: verifies the exported Postman collection covers all 22 required requests and shared test assertions.
+- `npm run test:mock-server`: verifies sandbox success responses and deterministic error triggers.
+
+## Final Metadata Note
+
+`ZETHETA_INTERN_ID` is intentionally marked `PENDING_ZETHETA_ISSUED_ID` until Zetheta issues the final intern identifier.

@@ -3,6 +3,7 @@
 ## Candidate Details
 
 - Name: Radhika Dwivedi
+- Intern ID: PENDING_ZETHETA_ISSUED_ID
 - Email: dwivediradhika29@gmail.com
 - Project Code: P01D
 - Repository URL: https://github.com/radhe290/Open-Banking-Gateway.git
@@ -15,7 +16,7 @@ The architecture work used a federated gateway-by-domain model for accounts, pay
 
 The OpenAPI specifications were split by API domain to avoid a monolithic specification. Each API file includes paths, schemas, examples, security schemes, common headers, and reusable response structures. Spectral linting is configured locally and in GitHub Actions so that the specifications can be validated repeatedly as they evolve.
 
-The developer portal and sandbox artefacts focus on developer experience: onboarding flow, authentication guide, error reference, status/API reference pages, synthetic data, error injection, and reset behaviour. Governance documents cover rate limiting, versioning, deprecation, monitoring, and operational response so the submission reflects the full API platform lifecycle rather than only launch-day design.
+The developer portal and sandbox artefacts focus on developer experience: onboarding flow, authentication guide, error reference, status/API reference pages, synthetic data, implemented deterministic error injection, and reset behaviour. Governance documents cover rate limiting, versioning, deprecation, monitoring, and operational response so the submission reflects the full API platform lifecycle rather than only launch-day design.
 
 ## Design Decision Log
 
@@ -25,6 +26,7 @@ The developer portal and sandbox artefacts focus on developer experience: onboar
 | API format | OpenAPI 3.0.3 | AsyncAPI only, custom Markdown docs | OpenAPI is required by the brief and supports linting, contract tests, mocks, and developer docs. |
 | Rate limiting | Token bucket with endpoint tiers | Fixed window, sliding log | Allows bursts while preserving predictable per-TPP quotas. |
 | Versioning | URI major version plus semantic minor metadata | Header-only versioning | Clear for third-party developers and compatible with open banking examples. |
+| Sandbox mock | Built-in Node mock plus Prism domain mocks | Documentation-only mock, custom Express service | Keeps the assessment runnable without adding dependencies while still supporting OpenAPI-backed examples. |
 
 ## Challenges Encountered
 
@@ -50,3 +52,6 @@ AI assistance was used for project planning, documentation drafting, consistency
 | Feasibility & Practicality | 8/10 | Mock server, governance, monitoring |
 | CV Alignment | 8/10 | API platform engineering artefacts |
 
+## Final Pending Item
+
+The intern ID is marked `PENDING_ZETHETA_ISSUED_ID` and should be replaced immediately after Zetheta issues the identifier.

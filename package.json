@@ -4,6 +4,10 @@
   "private": true,
   "scripts": {
     "lint:openapi": "spectral lint docs/api-specs/*.yaml",
+    "test:postman": "node tests/api-contract-tests/validate-postman-collection.js",
+    "test:mock-server": "node tests/api-contract-tests/validate-mock-server.js",
+    "test": "npm run lint:openapi && npm run test:postman && npm run test:mock-server",
+    "mock:sandbox": "node src/mock-server/sandbox-server.js",
     "mock:accounts": "prism mock docs/api-specs/openapi-accounts.yaml --port 4010",
     "mock:consents": "prism mock docs/api-specs/openapi-consents.yaml --port 4011",
     "mock:payments": "prism mock docs/api-specs/openapi-payments.yaml --port 4012",

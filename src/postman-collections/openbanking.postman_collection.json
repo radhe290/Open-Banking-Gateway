@@ -6,12 +6,41 @@
   },
   "variable": [
     { "key": "baseUrl", "value": "https://sandbox.meridian.example/v3.1" },
+    { "key": "productionBaseUrl", "value": "https://api.meridian.example/v3.1" },
     { "key": "accessToken", "value": "replace-with-sandbox-token" },
     { "key": "financialId", "value": "meridian-bank" },
     { "key": "consentId", "value": "con-1001" },
     { "key": "accountId", "value": "acc-1001" },
     { "key": "paymentId", "value": "pay-1001" },
     { "key": "subscriptionId", "value": "sub-1001" }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('status code is documented success or error', function () {",
+          "  pm.expect([200, 201, 204, 400, 401, 403, 404, 409, 422, 429, 500, 503]).to.include(pm.response.code);",
+          "});",
+          "",
+          "if (pm.response.code !== 204 && pm.response.text()) {",
+          "  pm.test('response is valid JSON when a body is returned', function () {",
+          "    pm.response.to.be.json;",
+          "  });",
+          "}",
+          "",
+          "if (pm.response.code >= 400 && pm.response.text()) {",
+          "  pm.test('error response uses shared envelope', function () {",
+          "    var body = pm.response.json();",
+          "    pm.expect(body).to.have.property('error');",
+          "    pm.expect(body.error).to.have.property('code');",
+          "    pm.expect(body.error).to.have.property('message');",
+          "  });",
+          "}"
+        ]
+      }
+    }
   ],
   "item": [
     {
@@ -286,7 +315,8 @@
               { "key": "Authorization", "value": "Bearer {{accessToken}}" },
               { "key": "Content-Type", "value": "application/json" },
               { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
-              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" },
+              { "key": "x-idempotency-key", "value": "{{$guid}}" }
             ],
             "body": {
               "mode": "raw",
@@ -308,6 +338,18 @@
           }
         },
         {
+          "name": "Delete Event Subscription",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+            ],
+            "url": "{{baseUrl}}/event-subscriptions/{{subscriptionId}}"
+          }
+        },
+        {
           "name": "Poll Events",
           "request": {
             "method": "POST",
@@ -315,7 +357,8 @@
               { "key": "Authorization", "value": "Bearer {{accessToken}}" },
               { "key": "Content-Type", "value": "application/json" },
               { "key": "x-fapi-interaction-id", "value": "{{$guid}}" },
-              { "key": "x-fapi-financial-id", "value": "{{financialId}}" }
+              { "key": "x-fapi-financial-id", "value": "{{financialId}}" },
+              { "key": "x-idempotency-key", "value": "{{$guid}}" }
             ],
             "body": {
               "mode": "raw",

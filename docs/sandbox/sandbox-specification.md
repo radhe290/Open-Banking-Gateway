@@ -39,7 +39,8 @@ Sandbox data should reset nightly and also support manual reset per developer ap
 
 ## Sandbox Capabilities
 
-- Dynamic mocks generated from the OpenAPI specifications through Prism.
+- Deterministic local sandbox mock server available through `npm run mock:sandbox`.
+- Dynamic mocks generated from the OpenAPI specifications through Prism for domain-level examples.
 - Synthetic customers and accounts with no production personal data.
 - Error injection using deterministic IDs and payment amounts.
 - Configurable latency profiles for normal, degraded, and timeout scenarios.
